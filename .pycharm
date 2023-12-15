@@ -1,0 +1,45 @@
+def func(x):
+    return x**3 - 3*x - 1
+
+def false_position(func, a, b, tol=1e-6, max_iter=100):
+    """
+    False Position (Regula Falsi) method to find root of a function.
+
+    Parameters:
+    - func: The function for which to find the root.
+    - a, b: Initial bracketing interval [a, b].
+    - tol: Tolerance for the root approximation.
+    - max_iter: Maximum number of iterations.
+
+    Returns:
+    - Approximation of the root.
+    """
+
+    # Check if the interval [a, b] brackets a root
+    if func(a) * func(b) > 0:
+        raise ValueError("The interval [a, b] does not bracket a root.")
+
+    for i in range(max_iter):
+        # False Position formula
+        c = (a * func(b) - b * func(a)) / (func(b) - func(a))
+
+        # Check if the root has been found with sufficient accuracy
+        if abs(func(c)) < tol:
+            return c
+
+        # Update the bracketing interval [a, b]
+        if func(c) * func(a) < 0:
+            b = c
+        else:
+            a = c
+
+    raise ValueError("False Position method did not converge within the maximum number of iterations.")
+
+# Initial bracketing interval [a, b]
+a = -2.0
+b = 2.0
+
+# Call the false_position function with the given function
+root_approximation = false_position(func, a, b)
+
+print(f"Approximate root: {root_approximation}")
